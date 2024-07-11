@@ -1,72 +1,48 @@
 #ifndef PHILO_H
 #define PHILO_H
 
-# include <unistd.h>
-# include <stdio.h>
-# include <pthread.h>
-# include <time.h>
-# include <limits.h>
-# include <stdlib.h>
 # include <stdbool.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
 # include <sys/time.h>
+# include <pthread.h>
+# include <limits.h>
 
 typedef struct s_philo t_philo;
-typedef struct s_all_philo t_all_philo;
-
-typedef	struct s_fork
-{
-	pthread_mutex_t	fork;
-	int				id_fork;
-}	t_fork;
-
-
-struct s_all_philo 
-{
-	int				nbr_philo;
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
-	int				max_meal;
-
-	long			start_time;
-	bool			begin_meal;
-	bool			end_meal;
-
-    pthread_mutex_t	lock;
-    pthread_mutex_t	write_lock;
-	t_philo			*all_philo;
-	t_fork			*all_fork;
-};
+typedef struct s_table_philo t_table_philo;
 
 struct s_philo
 {
+    long			philo_id;
+    pthread_mutex_t	*l_fork;
+    pthread_mutex_t	*r_fork;
 	pthread_t		philo_thread;
-	int				philo_id;
-	t_fork			l_fork;
-	t_fork			r_fork;
+	t_table_philo	*table;
+};
 
-	t_all_philo		*all;
-	long			last_meal_time;
+struct s_table_philo
+{
+	long			nbr_philo;
+	long			t2d;
+	long			t2e;
+	long			t2s;
+	long			max_nbr_meals;
+	long			start_time;
+	bool			begin_simulation;
+	t_philo			*all_philos;
+	pthread_mutex_t	*all_fork;
+	pthread_mutex_t	record;
+	pthread_mutex_t	table_lock;
 };
 
 
-
-/*Parcing of the programe*/
-int chec_arg(char **av);
-
-/*Utils*/
+/* Utils */
 long    ft_atol(char *str);
-long	now(void);
-void	exit_err(char *err_msg);
-void	philo_print(t_philo *philo, char *str);
-/*initialisation*/
-void	init_all(t_all_philo *all, char **av);
-void	threads(t_all_philo *all);
-/*Routine*/
+long	now();
+/* Routine */
 void	*philo_routine(void *arg);
-/* Set and Get */
-void	set_long(pthread_mutex_t *lock, long *dest, long value);
-void	set_bool(pthread_mutex_t *lock, bool *dest, bool value);
-long    get_long(pthread_mutex_t *lock, long value);
-bool    get_bool(pthread_mutex_t *lock, bool value);
+
+
+bool	get_bool(pthread_mutex_t *lock, bool value);
 #endif
