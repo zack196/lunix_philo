@@ -1,11 +1,13 @@
 NAME = philo
 CC = cc 
-CFLAG = -Wall -Wextra -Werror -fsanitize=thread
+CFLAG = -Wall -Wextra -Werror  #-fsanitize=thread
 
 SRC = ./main.c	\
 	  ./utils.c	\
 	  ./philo_routine.c \
-	  ./geters_and_seters.c
+	  ./get_set_philo.c \
+	  ./monitor.c \
+	  ./struct_philo.c
 
 OBJ = $(SRC:.c=.o)
 

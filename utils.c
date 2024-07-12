@@ -1,19 +1,21 @@
 #include "philo.h"
 
-long    ft_atol(char *str)
+long	ft_atol(char *str)
 {
-	unsigned	long	nbr;
-	int	i;
-	int	sign;
+	unsigned long	nbr;
+	int				i;
+	int				sign;
 
 	i = 0;
 	sign = 1;
 	if (str[i] == '-' || str[i] == '+')
+	{
 		if (str[i++] == '-')
 		{
 			printf("nbr should be positive!\n");
 			exit(1);
 		}
+	}
 	nbr = 0;
 	while (str[i])
 		nbr = 10 * nbr + (str[i++] - '0');
@@ -23,9 +25,9 @@ long    ft_atol(char *str)
 	return (nbr);
 }
 
-long	now()
+long	now(void)
 {
-	struct	timeval	tv;
+	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
 		return (printf("time function fealed!\n"));
