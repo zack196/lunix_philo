@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_routine.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-oirg <zel-oirg@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 08:54:52 by zel-oirg          #+#    #+#             */
+/*   Updated: 2024/07/12 11:11:41 by zel-oirg         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	eat(t_philo *philo)
@@ -32,6 +44,8 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	while (!get_bool(philo->table->table_lock, &philo->table->begin_simulation))
 		;
+	long_p_p(philo->table->table_lock, &philo->table->nbr_philo);
+	set_long(&philo->philo_lock, &philo->last_meal, now());
 	if (philo->philo_id % 2 == 0)
 		ft_sleep(philo->table->t2e * 0.8);
 	while (!get_bool(philo->table->table_lock, &philo->table->end_simulation))

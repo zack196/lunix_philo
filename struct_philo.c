@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct_philo.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-oirg <zel-oirg@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 08:56:06 by zel-oirg          #+#    #+#             */
+/*   Updated: 2024/07/12 10:31:53 by zel-oirg         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	philo_init(t_table_philo *table)
@@ -12,6 +24,7 @@ void	philo_init(t_table_philo *table)
 		table->all_philos[i].table = table;
 		table->all_philos[i].philo_eat = false;
 		table->all_philos[i].philo_full = false;
+		// table->all_philos[i].philo_ready = false;
 		pthread_mutex_init(&table->all_philos[i].philo_lock, NULL);
 		table->all_philos[i].r_fork = &table->all_fork[i];
 		table->all_philos[i].l_fork
@@ -43,6 +56,7 @@ int	init_table(t_table_philo *table, char **av)
 	table->t2s = ft_atol(av[4]);
 	table->begin_simulation = false;
 	table->end_simulation = false;
+	table->nbr_ready_philo = 0;
 	if (av[5])
 		table->max_nbr_meals = ft_atol(av[5]);
 	else

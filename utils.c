@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-oirg <zel-oirg@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/12 08:55:08 by zel-oirg          #+#    #+#             */
+/*   Updated: 2024/07/12 08:55:09 by zel-oirg         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 long	ft_atol(char *str)
@@ -40,6 +52,11 @@ void	record(t_philo *philo, char *str)
 
 	all = philo->table;
 	pthread_mutex_lock(&all->record);
+	if (get_bool(philo->table->table_lock, &philo->table->end_simulation))
+	{
+		pthread_mutex_unlock(&all->record);
+		return ;
+	}
 	printf("%ld %ld %s\n", now() - all->start_time, philo->philo_id, str);
 	pthread_mutex_unlock(&all->record);
 }
