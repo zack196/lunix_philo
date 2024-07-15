@@ -6,13 +6,13 @@
 /*   By: zel-oirg <zel-oirg@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:56:06 by zel-oirg          #+#    #+#             */
-/*   Updated: 2024/07/12 10:31:53 by zel-oirg         ###   ########.fr       */
+/*   Updated: 2024/07/14 07:40:14 by zel-oirg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_init(t_table_philo *table)
+int	philo_init(t_table_philo *table)
 {
 	int	i;
 
@@ -24,12 +24,13 @@ void	philo_init(t_table_philo *table)
 		table->all_philos[i].table = table;
 		table->all_philos[i].philo_eat = false;
 		table->all_philos[i].philo_full = false;
-		// table->all_philos[i].philo_ready = false;
-		pthread_mutex_init(&table->all_philos[i].philo_lock, NULL);
-		table->all_philos[i].r_fork = &table->all_fork[i];
-		table->all_philos[i].l_fork
+		if (pthread_mutex_init(&table->all_philos[i].philo_lock, NULL))
+			return (clean_up(table), 1);
+		table->all_philos[i].l_fork = &table->all_fork[i];
+		table->all_philos[i].r_fork
 			= &table->all_fork[(i + 1) % table->nbr_philo];
 	}
+	return (0);
 }
 
 int	init_mutex(t_table_philo *table)
@@ -38,13 +39,12 @@ int	init_mutex(t_table_philo *table)
 
 	i = -1;
 	while (++i < table->nbr_philo)
-	{
 		if (pthread_mutex_init(&table->all_fork[i], NULL))
-			return (printf("error init mutex!\n"), 1);
-	}
-	if (pthread_mutex_init(table->table_lock, NULL)
-		&& pthread_mutex_init(&table->record, NULL))
-		return (printf("error init mutex!\n"), 1);
+			return (clean_up(table), 1);
+	if (pthread_mutex_init(table->table_lock, NULL))
+		return (clean_up(table), 1);
+	if (pthread_mutex_init(&table->record, NULL))
+		return (clean_up(table), 1);
 	return (0);
 }
 
@@ -66,9 +66,10 @@ int	init_table(t_table_philo *table, char **av)
 		return (0);
 	table->all_philos = malloc(sizeof (t_philo) * table->nbr_philo);
 	if (!table->all_philos)
-		return (0);
-	philo_init(table);
+		return (free(table->all_fork), 0);
 	if (init_mutex(table))
 		return (0);
+	if (philo_init(table))
+		return(0);
 	return (table->nbr_philo && table->t2d && table->t2e && table->t2s);
 }

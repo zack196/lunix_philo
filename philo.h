@@ -6,7 +6,7 @@
 /*   By: zel-oirg <zel-oirg@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:55:26 by zel-oirg          #+#    #+#             */
-/*   Updated: 2024/07/12 10:42:01 by zel-oirg         ###   ########.fr       */
+/*   Updated: 2024/07/14 07:36:01 by zel-oirg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,6 @@ void	long_p_p(pthread_mutex_t *lock, long *val);
 
 int	init_table(t_table_philo *table, char **av);
 
+
+void	clean_up(t_table_philo *table);
 #endif
