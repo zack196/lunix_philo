@@ -6,7 +6,7 @@
 /*   By: zel-oirg <zel-oirg@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 08:54:52 by zel-oirg          #+#    #+#             */
-/*   Updated: 2024/07/14 07:54:29 by zel-oirg         ###   ########.fr       */
+/*   Updated: 2024/07/28 08:38:24 by zel-oirg         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,13 @@ void	sleep_think(t_philo *philo)
 	ft_sleep(philo->table->t2s);
 	record(philo, "is thinking");
 }
-
+void	routine_one_philo(t_philo *philo)
+{
+	while (!get_bool(philo->table->table_lock, &philo->table->end_simulation))
+	{
+		ft_sleep(100);
+	}
+}
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
@@ -46,6 +52,8 @@ void	*philo_routine(void *arg)
 		;
 	long_p_p(philo->table->table_lock, &philo->table->nbr_ready_philo);
 	set_long(&philo->philo_lock, &philo->last_meal, now());
+	if (philo->table->nbr_philo == 1)
+		return (routine_one_philo(philo), NULL);
 	if (philo->philo_id % 2 == 0)
 		ft_sleep(philo->table->t2e * 0.8);
 	while (!get_bool(philo->table->table_lock, &philo->table->end_simulation))
@@ -59,5 +67,5 @@ void	*philo_routine(void *arg)
 		}
 		sleep_think(philo);
 	}
-	return (NULL);
+	return (NULL);//715 - 2
 }
